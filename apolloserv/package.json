@@ -5,7 +5,7 @@
   "scripts": {
     "compile": "tsc",
     "start": "npm run compile && node ./dist/index.js",
-    "dev": "node --import ./scripts/register.js --watch src/index.ts",
+    "dev": "ts-node --esm src/index.ts",
     "generate": "graphql-codegen",
     "prisma": "prisma"
   },
@@ -21,7 +21,9 @@
     "bcrypt": "^5.1.1",
     "graphql": "^16.10.0",
     "graphql-tag": "^2.12.6",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "reflect-metadata": "^0.2.2",
+    "type-graphql": "^2.0.0-rc.2"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^5.0.5",
