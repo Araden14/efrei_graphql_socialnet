@@ -128,3 +128,53 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+.DS_Store
+node_modules/
+dist/
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+apolloserv/node_modules
+apolloserv/dist
+apolloserv/.env
+apolloserv/.env.local
+apolloserv/.env.development.local
+apolloserv/.env.test.local
+apolloserv/.env.production.local
+
+svelte/node_modules
+svelte/dist
+svelte/.env
+svelte/.env.local
+svelte/.env.development.local
+svelte/.env.test.local
+svelte/.env.production.local
+svelte/.svelte-kit
+
+node_modules
+
+# Output
+.output
+.vercel
+.netlify
+.wrangler
+/.svelte-kit
+/build
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.*
+!.env.example
+!.env.test
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
