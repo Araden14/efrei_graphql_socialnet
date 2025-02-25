@@ -1,9 +1,4 @@
-type Mutation {
-  register(email: String!, password: String!, name: String): String
-  createPost(title: String!, content: String!, authorId: Int!): Post
-}
-
-type Post {
+type GraphQLPost {
   id: Int!
   title: String!
   content: String!
@@ -13,5 +8,11 @@ type Post {
 }
 
 type Query {
-  posts: [Post]
+  posts: [GraphQLPost]
 }
+
+type Mutation {
+  register(email: String!, password: String!, name: String): String
+  login(email: String!, password: String!): String
+  createPost(title: String!, content: String!, authorId: Int!): GraphQLPost
+} 

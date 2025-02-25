@@ -1,16 +1,17 @@
 import {CodegenConfig} from '@graphql-codegen/cli'
- 
+
 const config: CodegenConfig = {
-  schema: './src/schema.ts',
+  schema: './src/graphql/schema.graphql',
   generates: {
     './src/types.ts': {
       plugins: ["typescript", "typescript-resolvers"],
       config: {
-        contextType: './context#DataSourceContext',
+        contextType: '.context#Context',
         mappers: {
-            Track: './models#TrackModel',
-            Author: './models#AuthorModel'
-          }
+            Post: '.prisma/client#Post',
+            User: '.prisma/client#User'
+          },
+          prisma: './prisma/schema.prisma'
       }
     }
   }

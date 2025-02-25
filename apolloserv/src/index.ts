@@ -1,24 +1,34 @@
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
-import { resolvers } from './resolvers.js';
 import { readFileSync } from 'fs';
-import { fileURLToPath } from 'url';
-import path from 'path';
+import { UserResolver } from './graphql/resolvers/user.resolver.js';
+import { PostResolver } from './graphql/resolvers/post.resolver.js';
 
-// Remplacer __dirname par une alternative compatible ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import db from './db.js';
 
-// Lire le fichier schema.graphql
-const typeDefs = readFileSync(path.join(__dirname, 'graphql/schema.graphql'), 'utf-8');
+// Lire le schéma GraphQL
+const typeDefs = readFileSync('./src/graphql/schema.graphql', 'utf-8');
 
 const server = new ApolloServer({
   typeDefs,
-  resolvers,
+  resolvers: {
+    Query: {
+      ...UserResolver.Query,
+      ...PostResolver.Query
+    },
+    Mutation: {
+      ...UserResolver.Mutation,
+      ...PostResolver.Mutation
+    }
+  }
 });
 
 const { url } = await startStandaloneServer(server, {
   listen: { port: 4000 },
+  context: async ({ req }) => ({
+    prisma: db,
+    token: req.headers.authorization?.split('Bearer ')[1]
+  })
 });
 
-console.log(`🚀 Server ready at: ${url}`);
+console.log(`🚀 Server ready at ${url}`);
