@@ -17,7 +17,7 @@ export const SignIn: NonNullable<MutationResolvers['SignIn']> = async (_, {email
       message: 'user connected',
       success: true,
       token: jwtToken,
-      email: user.email
+      user: user
     }
 
   } catch (e) {
@@ -26,7 +26,7 @@ export const SignIn: NonNullable<MutationResolvers['SignIn']> = async (_, {email
       message: (e as Error).message,
       success: false,
       token: null,
-      email: null,
+      user: null,
     }
   }
 }

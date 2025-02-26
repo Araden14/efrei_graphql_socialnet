@@ -1,25 +1,15 @@
-type GraphQLPost {
-  id: Int!
-  title: String!
-  content: String!
-  authorId: Int!
-  author: GraphQLUser!
-  comments: [GraphQLComment!]!
-  likes: [GraphQLLike!]!
-  createdAt: String!
-  updatedAt: String!
-}
-
-type Query {
-  posts: [GraphQLPost!]!
-}
+scalar DateTime
 
 type Mutation {
-  createUser(email: String!, password: String!, name: String): CreateUserResponse!
-  signIn(email: String!, password: String!): SignInResponse!
+  createUser(email: String!, password: String!, username: String!): CreateUserResponse!
+  SignIn(email: String!, password: String!, username: String): SignInResponse!
   createPost(title: String!, content: String!): PostResponse!
   likePost(postId: Int!): LikeResponse!
   unlikePost(postId: Int!): LikeResponse!
+}
+
+type Query {
+  fetchPosts: [GraphQLPost!]!
 }
 
 type CreateUserResponse {
@@ -37,6 +27,29 @@ type SignInResponse {
   user: GraphQLUser
 }
 
+type GraphQLUser {
+  id: Int!
+  email: String!
+  username: String
+  posts: [GraphQLPost!]
+  comments: [GraphQLComment!]
+  likes: [GraphQLLike!]
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type GraphQLPost {
+  id: Int!
+  title: String!
+  content: String!
+  authorId: Int!
+  author: GraphQLUser
+  comments: [GraphQLComment!]
+  likes: [GraphQLLike!]
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
 type PostResponse {
   code: Int!
   success: Boolean!
@@ -44,22 +57,20 @@ type PostResponse {
   post: GraphQLPost
 }
 
+type GraphQLLike {
+  id: Int!
+  userId: Int!
+  user: GraphQLUser!
+  postId: Int!
+  post: GraphQLPost!
+  createdAt: DateTime
+  updatedAt: DateTime
+}
 type LikeResponse {
   code: Int!
   success: Boolean!
   message: String!
   like: GraphQLLike
-}
-
-type GraphQLUser {
-  id: Int!
-  email: String!
-  name: String
-  posts: [GraphQLPost!]!
-  comments: [GraphQLComment!]!
-  likes: [GraphQLLike!]!
-  createdAt: String!
-  updatedAt: String!
 }
 
 type GraphQLComment {
@@ -69,16 +80,6 @@ type GraphQLComment {
   author: GraphQLUser!
   postId: Int!
   post: GraphQLPost!
-  createdAt: String!
-  updatedAt: String!
-}
-
-type GraphQLLike {
-  id: Int!
-  userId: Int!
-  user: GraphQLUser!
-  postId: Int!
-  post: GraphQLPost!
-  createdAt: String!
-  updatedAt: String!
+  createdAt: DateTime
+  updatedAt: DateTime
 }

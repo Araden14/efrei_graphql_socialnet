@@ -1,13 +1,14 @@
 import { hashPassword } from "../../modules/auth.js";
 import { MutationResolvers } from "../../types.js";
+import { Context } from "../../context.js";
 import db from "../../db.js";
 
-export const createUser: NonNullable<MutationResolvers['createUser']> = async (_, {email, username, password}) => {
+export const createUser: NonNullable<MutationResolvers['createUser']> = async (_, {email, username, password}, context: Context) => {
   try {
     const createdUser = await db.user.create({
       data: {
         email,
-        name: username,
+        username,
         password: await hashPassword(password)
       }
     })
@@ -15,15 +16,9 @@ export const createUser: NonNullable<MutationResolvers['createUser']> = async (_
     return {
       code: 201,
       success: true,
-      message: `user ${username} has been created`,
-      user: {
-        id: createdUser.id,
-        email: createdUser.email,
-        name: createdUser.name,
-        createdAt: createdUser.createdAt.toDateString(),
-        updatedAt: createdUser.updatedAt.toDateString()
-      }
-    }
+      message: "User created successfully",
+      user: createdUser
+    };
   } catch (error) {
     return {
       code: 400,

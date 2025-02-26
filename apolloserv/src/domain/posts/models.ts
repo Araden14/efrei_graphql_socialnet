@@ -6,15 +6,19 @@ import { Context } from "../../context.js"
 
 export const PostResolver: Resolvers['GraphQLPost'] = {
     author: async ({author}, _, {dataSources: {db}}: Context) => {
-        const user = await db.user.findUniqueOrThrow({where: {id: author.id}});
+        const user = await db.user.findUniqueOrThrow({where: {id: author?.id}});
         return {
             ...user,
-            createdAt: user.createdAt.toISOString(),
-            updatedAt: user.updatedAt.toISOString()
         };
     },
     comments: async ({id}, _, {dataSources: {db}}: Context) => {
-        const comments = await db.comment.findMany({where: {postId: id}});
+        const comments = await db.comment.findMany({
+          where: { postId: id },
+          include: {
+            author: true,
+            post: true
+          }
+        });
         return comments.map(comment => ({
             ...comment,
             createdAt: comment.createdAt.toISOString(),
@@ -22,7 +26,13 @@ export const PostResolver: Resolvers['GraphQLPost'] = {
         }));
     },
     likes: async ({id}, _, {dataSources: {db}}: Context) => {
-        const likes = await db.like.findMany({where: {postId: id}});
+        const likes = await db.like.findMany({
+          where: { postId: id },
+          include: {
+            user: true,
+            post: true
+          }
+        });
         return likes.map(like => ({
             ...like,
             createdAt: like.createdAt.toISOString(),

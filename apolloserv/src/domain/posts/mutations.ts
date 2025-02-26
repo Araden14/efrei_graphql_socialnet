@@ -1,21 +1,25 @@
 import { MutationResolvers } from "../../types.js";
 import { WithRequired } from "../../utils/mapped-types.js";
 import db from "../../db.js";
+import { Context } from "../../context.js";
 type PostMutations = WithRequired<MutationResolvers, 'createPost'>
 
 const createPost: MutationResolvers['createPost'] = async (
-  _,
-  { title, content },
-  { dataSources: { db }, user }
+  parent = {},
+  args = { title: '', content: '' },
+  context: Context
 ) => {
   try {
-    if (!user) throw new Error('User is not provided')
+    if (!context.user) throw new Error('User is not provided')
 
     const createdPost = await db.post.create({
       data: {
-        title,
-        content,
-        authorId: user.id
+        title: args.title,
+        content: args.content,
+        authorId: context.user.id
+      },
+      include: {
+        author: true
       }
     })
   
@@ -23,13 +27,9 @@ const createPost: MutationResolvers['createPost'] = async (
       code: 201,
       message: 'post has been created',
       success: true,
-      post: {
-        ...createdPost,
-        createdAt: createdPost.createdAt.toISOString(),
-        updatedAt: createdPost.updatedAt.toISOString(),
-      }
+      post: createdPost
     }
-  } catch(e) {
+  } catch (e: unknown) {
     if (e instanceof Error) {
       return {
         code: 400,

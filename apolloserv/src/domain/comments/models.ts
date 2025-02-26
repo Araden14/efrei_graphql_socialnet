@@ -11,8 +11,8 @@ export const CommentResolver: Resolvers['GraphQLComment'] = {
             updatedAt: user.updatedAt.toISOString()
         };
     },
-    post: async ({post}, _, {dataSources: {db}}: Context) => {
-        const post = await db.post.findUniqueOrThrow({where: {id: post.id}});
+    post: async ({postId}, _, {dataSources: {db}}: Context) => {
+        const post = await db.post.findUniqueOrThrow({where: {id: postId}});
         return {
             ...post,
             createdAt: post.createdAt.toISOString(),

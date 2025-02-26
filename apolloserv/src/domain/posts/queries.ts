@@ -1,15 +1,17 @@
 import { QueryResolvers } from "../../types.js";
 import { WithRequired } from "../../utils/mapped-types.js";
-
-type PostQueries = WithRequired<QueryResolvers, 'posts'>
+import { Context } from "../../context.js";
+import db from "../../db.js";
+import { Post } from "@prisma/client";
+type PostQueries = WithRequired<QueryResolvers, 'fetchPosts'>
 
 export const postQueries: PostQueries = { 
-  posts: async (_, __, {dataSources: {db}}) => {
+  fetchPosts: async (parent = {}, args = {}, context: Context) => {
     try {
-      return await db.post.findMany()
+      return await context.dataSources.db.post.findMany()
     } catch {
       console.error('posts not found')
-      return null
+      return []
     }
   }
 }

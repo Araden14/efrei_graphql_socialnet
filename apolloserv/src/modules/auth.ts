@@ -6,13 +6,13 @@ export const createJWT = (user: User) => {
   const token = jwt.sign({
     id: user.id,
     email: user.email,
-    name: user.name
+    username: user.username
   }, process.env.JWT_SECRET as string, { expiresIn: '1h' })
 
   return token
 }
 
-export type AuthenticatedUser = Pick<User, 'id' | 'email' | 'name'>
+export type AuthenticatedUser = Pick<User, 'id' | 'email' | 'username'>
 
 export const getUser = (token: string): AuthenticatedUser | null => {
   try {
