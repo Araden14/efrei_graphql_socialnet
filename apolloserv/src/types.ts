@@ -1,7 +1,7 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { Post, User } from '.prisma/client';
+import { Post, User, Comment, Like } from '.prisma/client';
 import { Context } from './context';
-export type Maybe<T> = T | null;
+export type Maybe<T> = T | null;  
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
@@ -18,15 +18,21 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+export type CreateUserResponse = {
+  __typename?: 'CreateUserResponse';
+  code: Scalars['Int']['output'];
+  message: Scalars['String']['output'];
+  success: Scalars['Boolean']['output'];
+  user?: Maybe<GraphQlUser>;
+};
+
 export type GraphQlComment = {
   __typename?: 'GraphQLComment';
   author: GraphQlUser;
-  authorId: Scalars['Int']['output'];
   content: Scalars['String']['output'];
   createdAt: Scalars['String']['output'];
   id: Scalars['Int']['output'];
   post: GraphQlPost;
-  postId: Scalars['Int']['output'];
   updatedAt: Scalars['String']['output'];
 };
 
@@ -35,64 +41,80 @@ export type GraphQlLike = {
   createdAt: Scalars['String']['output'];
   id: Scalars['Int']['output'];
   post: GraphQlPost;
-  postId: Scalars['Int']['output'];
   updatedAt: Scalars['String']['output'];
   user: GraphQlUser;
-  userId: Scalars['Int']['output'];
 };
 
 export type GraphQlPost = {
   __typename?: 'GraphQLPost';
-  authorId: Scalars['Int']['output'];
+  author: GraphQlUser;
+  comments: Array<GraphQlComment>;
   content: Scalars['String']['output'];
   createdAt: Scalars['String']['output'];
   id: Scalars['Int']['output'];
+  likes: Array<GraphQlLike>;
   title: Scalars['String']['output'];
   updatedAt: Scalars['String']['output'];
 };
 
 export type GraphQlUser = {
   __typename?: 'GraphQLUser';
-  comments?: Maybe<Array<Maybe<GraphQlComment>>>;
+  comments: Array<GraphQlComment>;
   createdAt: Scalars['String']['output'];
   email: Scalars['String']['output'];
   id: Scalars['Int']['output'];
-  likes?: Maybe<Array<Maybe<GraphQlLike>>>;
+  likes: Array<GraphQlLike>;
   name?: Maybe<Scalars['String']['output']>;
-  posts?: Maybe<Array<Maybe<GraphQlPost>>>;
+  posts: Array<GraphQlPost>;
   updatedAt: Scalars['String']['output'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createPost?: Maybe<GraphQlPost>;
-  login?: Maybe<Scalars['String']['output']>;
-  register?: Maybe<Scalars['String']['output']>;
+  createPost: PostResponse;
+  createUser: CreateUserResponse;
+  signIn: SignInResponse;
 };
 
 
 export type MutationCreatePostArgs = {
-  authorId: Scalars['Int']['input'];
   content: Scalars['String']['input'];
   title: Scalars['String']['input'];
 };
 
 
-export type MutationLoginArgs = {
-  email: Scalars['String']['input'];
-  password: Scalars['String']['input'];
-};
-
-
-export type MutationRegisterArgs = {
+export type MutationCreateUserArgs = {
   email: Scalars['String']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
   password: Scalars['String']['input'];
 };
 
+
+export type MutationSignInArgs = {
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+};
+
+export type PostResponse = {
+  __typename?: 'PostResponse';
+  code: Scalars['Int']['output'];
+  message: Scalars['String']['output'];
+  post?: Maybe<GraphQlPost>;
+  success: Scalars['Boolean']['output'];
+};
+
 export type Query = {
   __typename?: 'Query';
-  posts?: Maybe<Array<Maybe<GraphQlPost>>>;
+  posts: Array<GraphQlPost>;
+};
+
+export type SignInResponse = {
+  __typename?: 'SignInResponse';
+  code: Scalars['Int']['output'];
+  message: Scalars['String']['output'];
+  success: Scalars['Boolean']['output'];
+  token?: Maybe<Scalars['String']['output']>;
+  user?: Maybe<GraphQlUser>;
 };
 
 
@@ -167,37 +189,49 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  CreateUserResponse: ResolverTypeWrapper<CreateUserResponse>;
   GraphQLComment: ResolverTypeWrapper<GraphQlComment>;
   GraphQLLike: ResolverTypeWrapper<GraphQlLike>;
   GraphQLPost: ResolverTypeWrapper<GraphQlPost>;
   GraphQLUser: ResolverTypeWrapper<GraphQlUser>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
+  PostResponse: ResolverTypeWrapper<PostResponse>;
   Query: ResolverTypeWrapper<{}>;
+  SignInResponse: ResolverTypeWrapper<SignInResponse>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
+  CreateUserResponse: CreateUserResponse;
   GraphQLComment: GraphQlComment;
   GraphQLLike: GraphQlLike;
   GraphQLPost: GraphQlPost;
   GraphQLUser: GraphQlUser;
   Int: Scalars['Int']['output'];
   Mutation: {};
+  PostResponse: PostResponse;
   Query: {};
+  SignInResponse: SignInResponse;
   String: Scalars['String']['output'];
+};
+
+export type CreateUserResponseResolvers<ContextType = Context, ParentType extends ResolversParentTypes['CreateUserResponse'] = ResolversParentTypes['CreateUserResponse']> = {
+  code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['GraphQLUser']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GraphQlCommentResolvers<ContextType = Context, ParentType extends ResolversParentTypes['GraphQLComment'] = ResolversParentTypes['GraphQLComment']> = {
   author?: Resolver<ResolversTypes['GraphQLUser'], ParentType, ContextType>;
-  authorId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   post?: Resolver<ResolversTypes['GraphQLPost'], ParentType, ContextType>;
-  postId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -206,51 +240,71 @@ export type GraphQlLikeResolvers<ContextType = Context, ParentType extends Resol
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   post?: Resolver<ResolversTypes['GraphQLPost'], ParentType, ContextType>;
-  postId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   user?: Resolver<ResolversTypes['GraphQLUser'], ParentType, ContextType>;
-  userId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GraphQlPostResolvers<ContextType = Context, ParentType extends ResolversParentTypes['GraphQLPost'] = ResolversParentTypes['GraphQLPost']> = {
-  authorId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  author?: Resolver<ResolversTypes['GraphQLUser'], ParentType, ContextType>;
+  comments?: Resolver<Array<ResolversTypes['GraphQLComment']>, ParentType, ContextType>;
   content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  likes?: Resolver<Array<ResolversTypes['GraphQLLike']>, ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GraphQlUserResolvers<ContextType = Context, ParentType extends ResolversParentTypes['GraphQLUser'] = ResolversParentTypes['GraphQLUser']> = {
-  comments?: Resolver<Maybe<Array<Maybe<ResolversTypes['GraphQLComment']>>>, ParentType, ContextType>;
+  comments?: Resolver<Array<ResolversTypes['GraphQLComment']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  likes?: Resolver<Maybe<Array<Maybe<ResolversTypes['GraphQLLike']>>>, ParentType, ContextType>;
+  likes?: Resolver<Array<ResolversTypes['GraphQLLike']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  posts?: Resolver<Maybe<Array<Maybe<ResolversTypes['GraphQLPost']>>>, ParentType, ContextType>;
+  posts?: Resolver<Array<ResolversTypes['GraphQLPost']>, ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  createPost?: Resolver<Maybe<ResolversTypes['GraphQLPost']>, ParentType, ContextType, RequireFields<MutationCreatePostArgs, 'authorId' | 'content' | 'title'>>;
-  login?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
-  register?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationRegisterArgs, 'email' | 'password'>>;
+  createPost?: Resolver<ResolversTypes['PostResponse'], ParentType, ContextType, RequireFields<MutationCreatePostArgs, 'content' | 'title'>>;
+  createUser?: Resolver<ResolversTypes['CreateUserResponse'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'email' | 'password'>>;
+  signIn?: Resolver<ResolversTypes['SignInResponse'], ParentType, ContextType, RequireFields<MutationSignInArgs, 'email' | 'password'>>;
+};
+
+export type PostResponseResolvers<ContextType = Context, ParentType extends ResolversParentTypes['PostResponse'] = ResolversParentTypes['PostResponse']> = {
+  code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  post?: Resolver<Maybe<ResolversTypes['GraphQLPost']>, ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  posts?: Resolver<Maybe<Array<Maybe<ResolversTypes['GraphQLPost']>>>, ParentType, ContextType>;
+  posts?: Resolver<Array<ResolversTypes['GraphQLPost']>, ParentType, ContextType>;
+};
+
+export type SignInResponseResolvers<ContextType = Context, ParentType extends ResolversParentTypes['SignInResponse'] = ResolversParentTypes['SignInResponse']> = {
+  code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  token?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['GraphQLUser']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = Context> = {
+  CreateUserResponse?: CreateUserResponseResolvers<ContextType>;
   GraphQLComment?: GraphQlCommentResolvers<ContextType>;
   GraphQLLike?: GraphQlLikeResolvers<ContextType>;
   GraphQLPost?: GraphQlPostResolvers<ContextType>;
   GraphQLUser?: GraphQlUserResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
+  PostResponse?: PostResponseResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  SignInResponse?: SignInResponseResolvers<ContextType>;
 };
 

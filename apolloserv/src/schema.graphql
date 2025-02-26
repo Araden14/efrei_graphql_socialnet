@@ -1,0 +1,70 @@
+type GraphQLPost {
+  id: Int!
+  title: String!
+  content: String!
+  author: GraphQLUser!
+  comments: [GraphQLComment!]!
+  likes: [GraphQLLike!]!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Query {
+  posts: [GraphQLPost!]!
+}
+
+type Mutation {
+  createUser(email: String!, password: String!, name: String): CreateUserResponse!
+  signIn(email: String!, password: String!): SignInResponse!
+  createPost(title: String!, content: String!): PostResponse!
+}
+
+type CreateUserResponse {
+  code: Int!
+  success: Boolean!
+  message: String!
+  user: GraphQLUser
+}
+
+type SignInResponse {
+  code: Int!
+  success: Boolean!
+  message: String!
+  token: String
+  user: GraphQLUser
+}
+
+type PostResponse {
+  code: Int!
+  success: Boolean!
+  message: String!
+  post: GraphQLPost
+}
+
+type GraphQLUser {
+  id: Int!
+  email: String!
+  name: String
+  posts: [GraphQLPost!]!
+  comments: [GraphQLComment!]!
+  likes: [GraphQLLike!]!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type GraphQLComment {
+  id: Int!
+  content: String!
+  author: GraphQLUser!
+  post: GraphQLPost!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type GraphQLLike {
+  id: Int!
+  user: GraphQLUser!
+  post: GraphQLPost!
+  createdAt: String!
+  updatedAt: String!
+}

@@ -1,34 +1,30 @@
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import { readFileSync } from 'fs';
-import { UserResolver } from './graphql/resolvers/user.resolver.js';
-import { PostResolver } from './graphql/resolvers/post.resolver.js';
-
+import { userMutations } from './domain/user/mutations.js';
 import db from './db.js';
-
+import { PrismaClient } from '.prisma/client';
+import { Context } from './context';
+import { resolvers } from './resolvers.js';
 // Lire le schéma GraphQL
-const typeDefs = readFileSync('./src/graphql/schema.graphql', 'utf-8');
+const typeDefs = readFileSync('./src/schema.graphql', 'utf-8');
 
-const server = new ApolloServer({
+interface MyContext {
+  prisma: PrismaClient
+  token?: string
+}
+
+const server = new ApolloServer<MyContext>({
   typeDefs,
-  resolvers: {
-    Query: {
-      ...UserResolver.Query,
-      ...PostResolver.Query
-    },
-    Mutation: {
-      ...UserResolver.Mutation,
-      ...PostResolver.Mutation
-    }
-  }
+  resolvers: resolvers
 });
 
 const { url } = await startStandaloneServer(server, {
   listen: { port: 4000 },
   context: async ({ req }) => ({
     prisma: db,
-    token: req.headers.authorization?.split('Bearer ')[1]
-  })
+    token: req.headers.authorization?.split('Bearer ')[1],
+  }),
 });
 
 console.log(`🚀 Server ready at ${url}`);
