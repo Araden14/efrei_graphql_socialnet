@@ -15,4 +15,38 @@ type Mutation {
   register(email: String!, password: String!, name: String): String
   login(email: String!, password: String!): String
   createPost(title: String!, content: String!, authorId: Int!): GraphQLPost
-} 
+}
+
+type GraphQLUser {
+  id: Int!
+  email: String!
+  name: String
+  posts: [GraphQLPost]
+  comments: [GraphQLComment]
+  likes: [GraphQLLike]
+  createdAt: String!
+  updatedAt: String!
+}
+
+type GraphQLComment {
+  id: Int!
+  content: String!
+  authorId: Int!
+  author: GraphQLUser!
+  postId: Int!
+  post: GraphQLPost!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type GraphQLLike {
+  id: Int!
+  userId: Int!
+  user: GraphQLUser!
+  postId: Int!
+  post: GraphQLPost!
+  createdAt: String!
+  updatedAt: String!
+}
+
+
