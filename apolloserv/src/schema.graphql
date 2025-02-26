@@ -6,12 +6,20 @@ type Mutation {
   createPost(title: String!, content: String!): PostResponse!
   likePost(postId: Int!): LikeResponse!
   unlikePost(postId: Int!): LikeResponse!
+  createComment(postId: Int!, content: String!): CommentResponse!
+  updateComment(commentId: Int!, newContent: String!): CommentResponse!
+  deleteComment(commentId: Int!): CommentResponse!
+  updatePost(postId: Int!, newTitle: String, newContent: String): PostResponse!
+  deletePost(postId: Int!): PostResponse!
 }
 
 type Query {
   fetchPosts: [GraphQLPost!]!
   fetchLikes: [GraphQLLike!]!
   fetchLikesByUser: [GraphQLLike!]!
+  fetchComments: [GraphQLComment!]!
+  fetchCommentsByUser: [GraphQLComment!]!
+  fetchCommentsByPost(postId: Int!): [GraphQLComment!]!
 }
 
 type CreateUserResponse {
@@ -84,4 +92,11 @@ type GraphQLComment {
   post: GraphQLPost!
   createdAt: DateTime
   updatedAt: DateTime
+}
+
+type CommentResponse {
+  code: Int!
+  success: Boolean!
+  message: String!
+  comment: GraphQLComment
 }

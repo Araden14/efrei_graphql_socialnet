@@ -1,30 +1,54 @@
-// import { QueryResolvers } from "../../types.js";
-// import { WithRequired } from "../../utils/mapped-types.js";
-// import db from "../../db.js";
-// import { Context } from "../../context.js";
+import { QueryResolvers } from "../../types.js";
+import { WithRequired } from "../../utils/mapped-types.js";
+import { Context } from "../../context.js";
 
-// type CommentQueries = WithRequired<QueryResolvers, 'getComment'>
+type CommentQueries = WithRequired<QueryResolvers, 'fetchComments' | 'fetchCommentsByUser' | 'fetchCommentsByPost'>
 
-// export const commentQueries: CommentQueries = { 
-//   getComment: async (
-//     _: any, 
-//     { id }: { id: number }, 
-//     { user, dataSources: { db } }: Context
-//   ) => {
-//     try {
-//       if (!user) {
-//         console.error('Unauthenticated user trying to access comment');
-//         return null;
-//       }
-      
-//       const comment = await db.comment.findFirstOrThrow({
-//         where: { id }
-//       });
+export const commentQueries: CommentQueries = {
+  fetchComments: async (parent = {}, args = {}, context: Context) => {
+    try {
+      if (!context.user) {
+        console.error('Unauthenticated user trying to access comment');
+        return [];
+      }
 
-//       return comment;
-//     } catch {
-//       console.error('Comment not found');
-//       return null;
-//     }
-//   }
-// }
+      return await context.dataSources.db.comment.findMany({
+        include: {
+          post: true,
+          author: true,
+        },
+      });
+    } catch (error) {
+      console.error('Comments not found', error);
+      return [];
+    }
+  },
+  fetchCommentsByUser: async (parent = {}, args = {}, context: Context) => {
+    try {
+      return await context.dataSources.db.comment.findMany({
+        where: { authorId: context.user?.id },
+        include: {
+          post: true,
+          author: true,
+        },
+      });
+    } catch (error) {
+      console.error('Comments not found', error);
+      return [];
+    }
+  },
+  fetchCommentsByPost: async (parent = {}, args = {postId : 0}, context: Context) => {
+    try {
+      return await context.dataSources.db.comment.findMany({
+        where: { postId: args.postId },
+        include: {
+          post: true,
+          author: true,
+        },
+      });
+    } catch (error) {
+      console.error('Comments not found', error);
+      return [];
+    }
+  }
+};

@@ -19,6 +19,14 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
+export type CommentResponse = {
+  __typename?: 'CommentResponse';
+  code: Scalars['Int']['output'];
+  comment?: Maybe<GraphQlComment>;
+  message: Scalars['String']['output'];
+  success: Scalars['Boolean']['output'];
+};
+
 export type CreateUserResponse = {
   __typename?: 'CreateUserResponse';
   code: Scalars['Int']['output'];
@@ -86,10 +94,15 @@ export type LikeResponse = {
 export type Mutation = {
   __typename?: 'Mutation';
   SignIn: SignInResponse;
+  createComment: CommentResponse;
   createPost: PostResponse;
   createUser: CreateUserResponse;
+  deleteComment: CommentResponse;
+  deletePost: PostResponse;
   likePost: LikeResponse;
   unlikePost: LikeResponse;
+  updateComment: CommentResponse;
+  updatePost: PostResponse;
 };
 
 
@@ -97,6 +110,12 @@ export type MutationSignInArgs = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
   username?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type MutationCreateCommentArgs = {
+  content: Scalars['String']['input'];
+  postId: Scalars['Int']['input'];
 };
 
 
@@ -113,12 +132,35 @@ export type MutationCreateUserArgs = {
 };
 
 
+export type MutationDeleteCommentArgs = {
+  commentId: Scalars['Int']['input'];
+};
+
+
+export type MutationDeletePostArgs = {
+  postId: Scalars['Int']['input'];
+};
+
+
 export type MutationLikePostArgs = {
   postId: Scalars['Int']['input'];
 };
 
 
 export type MutationUnlikePostArgs = {
+  postId: Scalars['Int']['input'];
+};
+
+
+export type MutationUpdateCommentArgs = {
+  commentId: Scalars['Int']['input'];
+  newContent: Scalars['String']['input'];
+};
+
+
+export type MutationUpdatePostArgs = {
+  newContent?: InputMaybe<Scalars['String']['input']>;
+  newTitle?: InputMaybe<Scalars['String']['input']>;
   postId: Scalars['Int']['input'];
 };
 
@@ -132,9 +174,17 @@ export type PostResponse = {
 
 export type Query = {
   __typename?: 'Query';
+  fetchComments: Array<GraphQlComment>;
+  fetchCommentsByPost: Array<GraphQlComment>;
+  fetchCommentsByUser: Array<GraphQlComment>;
   fetchLikes: Array<GraphQlLike>;
   fetchLikesByUser: Array<GraphQlLike>;
   fetchPosts: Array<GraphQlPost>;
+};
+
+
+export type QueryFetchCommentsByPostArgs = {
+  postId: Scalars['Int']['input'];
 };
 
 export type SignInResponse = {
@@ -218,6 +268,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  CommentResponse: ResolverTypeWrapper<CommentResponse>;
   CreateUserResponse: ResolverTypeWrapper<CreateUserResponse>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   GraphQLComment: ResolverTypeWrapper<GraphQlComment>;
@@ -236,6 +287,7 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
+  CommentResponse: CommentResponse;
   CreateUserResponse: CreateUserResponse;
   DateTime: Scalars['DateTime']['output'];
   GraphQLComment: GraphQlComment;
@@ -249,6 +301,14 @@ export type ResolversParentTypes = {
   Query: {};
   SignInResponse: SignInResponse;
   String: Scalars['String']['output'];
+};
+
+export type CommentResponseResolvers<ContextType = Context, ParentType extends ResolversParentTypes['CommentResponse'] = ResolversParentTypes['CommentResponse']> = {
+  code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  comment?: Resolver<Maybe<ResolversTypes['GraphQLComment']>, ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type CreateUserResponseResolvers<ContextType = Context, ParentType extends ResolversParentTypes['CreateUserResponse'] = ResolversParentTypes['CreateUserResponse']> = {
@@ -321,10 +381,15 @@ export type LikeResponseResolvers<ContextType = Context, ParentType extends Reso
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   SignIn?: Resolver<ResolversTypes['SignInResponse'], ParentType, ContextType, RequireFields<MutationSignInArgs, 'email' | 'password'>>;
+  createComment?: Resolver<ResolversTypes['CommentResponse'], ParentType, ContextType, RequireFields<MutationCreateCommentArgs, 'content' | 'postId'>>;
   createPost?: Resolver<ResolversTypes['PostResponse'], ParentType, ContextType, RequireFields<MutationCreatePostArgs, 'content' | 'title'>>;
   createUser?: Resolver<ResolversTypes['CreateUserResponse'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'email' | 'password' | 'username'>>;
+  deleteComment?: Resolver<ResolversTypes['CommentResponse'], ParentType, ContextType, RequireFields<MutationDeleteCommentArgs, 'commentId'>>;
+  deletePost?: Resolver<ResolversTypes['PostResponse'], ParentType, ContextType, RequireFields<MutationDeletePostArgs, 'postId'>>;
   likePost?: Resolver<ResolversTypes['LikeResponse'], ParentType, ContextType, RequireFields<MutationLikePostArgs, 'postId'>>;
   unlikePost?: Resolver<ResolversTypes['LikeResponse'], ParentType, ContextType, RequireFields<MutationUnlikePostArgs, 'postId'>>;
+  updateComment?: Resolver<ResolversTypes['CommentResponse'], ParentType, ContextType, RequireFields<MutationUpdateCommentArgs, 'commentId' | 'newContent'>>;
+  updatePost?: Resolver<ResolversTypes['PostResponse'], ParentType, ContextType, RequireFields<MutationUpdatePostArgs, 'postId'>>;
 };
 
 export type PostResponseResolvers<ContextType = Context, ParentType extends ResolversParentTypes['PostResponse'] = ResolversParentTypes['PostResponse']> = {
@@ -336,6 +401,9 @@ export type PostResponseResolvers<ContextType = Context, ParentType extends Reso
 };
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  fetchComments?: Resolver<Array<ResolversTypes['GraphQLComment']>, ParentType, ContextType>;
+  fetchCommentsByPost?: Resolver<Array<ResolversTypes['GraphQLComment']>, ParentType, ContextType, RequireFields<QueryFetchCommentsByPostArgs, 'postId'>>;
+  fetchCommentsByUser?: Resolver<Array<ResolversTypes['GraphQLComment']>, ParentType, ContextType>;
   fetchLikes?: Resolver<Array<ResolversTypes['GraphQLLike']>, ParentType, ContextType>;
   fetchLikesByUser?: Resolver<Array<ResolversTypes['GraphQLLike']>, ParentType, ContextType>;
   fetchPosts?: Resolver<Array<ResolversTypes['GraphQLPost']>, ParentType, ContextType>;
@@ -351,6 +419,7 @@ export type SignInResponseResolvers<ContextType = Context, ParentType extends Re
 };
 
 export type Resolvers<ContextType = Context> = {
+  CommentResponse?: CommentResponseResolvers<ContextType>;
   CreateUserResponse?: CreateUserResponseResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   GraphQLComment?: GraphQlCommentResolvers<ContextType>;
