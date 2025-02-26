@@ -34,7 +34,9 @@ export const UserResolver = {
       if (!isValid) throw new Error('Invalid password');
 
       // Générer un token JWT
-      return generateToken(user);
+      const token = generateToken(user);
+
+      return token;
     }
   },
   Query: {}

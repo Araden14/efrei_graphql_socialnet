@@ -1,28 +1,3 @@
-// import { Resolver, Query, Mutation, Arg } from 'type-graphql';
-// import { PrismaClient } from '@prisma/client';
-// import { Post } from '../../types';
-
-// const prisma = new PrismaClient();
-
-// @Resolver(Post)
-// export class PostResolver {
-//   @Query(() => [Post])
-//   async posts(): Promise<Post[]> {
-//     return prisma.post.findMany();
-//   }
-
-//   @Mutation(() => Post)
-//   async createPost(
-//     @Arg('title') title: string,
-//     @Arg('content') content: string,
-//     @Arg('authorId') authorId: number
-//   ): Promise<Post> {
-//     return prisma.post.create({
-//       data: { title, content, authorId },
-//     });
-//   }
-// }
-
 import prisma from '../../db.js';
 
 export const PostResolver = {
