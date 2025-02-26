@@ -145,7 +145,7 @@ apolloserv/.env.local
 apolloserv/.env.development.local
 apolloserv/.env.test.local
 apolloserv/.env.production.local
-
+apolloserv/dev.db
 svelte/node_modules
 svelte/dist
 svelte/.env

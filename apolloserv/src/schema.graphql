@@ -1,0 +1,102 @@
+scalar DateTime
+
+type Mutation {
+  createUser(email: String!, password: String!, username: String!): CreateUserResponse!
+  SignIn(email: String!, password: String!, username: String): SignInResponse!
+  createPost(title: String!, content: String!): PostResponse!
+  likePost(postId: Int!): LikeResponse!
+  unlikePost(postId: Int!): LikeResponse!
+  createComment(postId: Int!, content: String!): CommentResponse!
+  updateComment(commentId: Int!, newContent: String!): CommentResponse!
+  deleteComment(commentId: Int!): CommentResponse!
+  updatePost(postId: Int!, newTitle: String, newContent: String): PostResponse!
+  deletePost(postId: Int!): PostResponse!
+}
+
+type Query {
+  fetchPosts: [GraphQLPost!]!
+  fetchLikes: [GraphQLLike!]!
+  fetchLikesByUser: [GraphQLLike!]!
+  fetchComments: [GraphQLComment!]!
+  fetchCommentsByUser: [GraphQLComment!]!
+  fetchCommentsByPost(postId: Int!): [GraphQLComment!]!
+}
+
+type CreateUserResponse {
+  code: Int!
+  success: Boolean!
+  message: String!
+  user: GraphQLUser
+}
+
+type SignInResponse {
+  code: Int!
+  success: Boolean!
+  message: String!
+  token: String
+  user: GraphQLUser
+}
+
+type GraphQLUser {
+  id: Int!
+  email: String!
+  username: String
+  posts: [GraphQLPost!]
+  comments: [GraphQLComment!]
+  likes: [GraphQLLike!]
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type GraphQLPost {
+  id: Int!
+  title: String!
+  content: String!
+  authorId: Int!
+  author: GraphQLUser
+  comments: [GraphQLComment!]
+  likes: [GraphQLLike!]
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type PostResponse {
+  code: Int!
+  success: Boolean!
+  message: String!
+  post: GraphQLPost
+}
+
+type GraphQLLike {
+  id: Int!
+  userId: Int!
+  user: GraphQLUser!
+  postId: Int!
+  post: GraphQLPost!
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+type LikeResponse {
+  code: Int!
+  success: Boolean!
+  message: String!
+  like: GraphQLLike
+}
+
+type GraphQLComment {
+  id: Int!
+  content: String!
+  authorId: Int!
+  author: GraphQLUser!
+  postId: Int!
+  post: GraphQLPost!
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type CommentResponse {
+  code: Int!
+  success: Boolean!
+  message: String!
+  comment: GraphQLComment
+}
