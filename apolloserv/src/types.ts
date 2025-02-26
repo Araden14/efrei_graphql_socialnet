@@ -132,6 +132,8 @@ export type PostResponse = {
 
 export type Query = {
   __typename?: 'Query';
+  fetchLikes: Array<GraphQlLike>;
+  fetchLikesByUser: Array<GraphQlLike>;
   fetchPosts: Array<GraphQlPost>;
 };
 
@@ -334,6 +336,8 @@ export type PostResponseResolvers<ContextType = Context, ParentType extends Reso
 };
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  fetchLikes?: Resolver<Array<ResolversTypes['GraphQLLike']>, ParentType, ContextType>;
+  fetchLikesByUser?: Resolver<Array<ResolversTypes['GraphQLLike']>, ParentType, ContextType>;
   fetchPosts?: Resolver<Array<ResolversTypes['GraphQLPost']>, ParentType, ContextType>;
 };
 

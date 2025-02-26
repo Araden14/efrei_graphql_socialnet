@@ -7,7 +7,7 @@ export const createJWT = (user: User) => {
     id: user.id,
     email: user.email,
     username: user.username
-  }, process.env.JWT_SECRET as string, { expiresIn: '1h' })
+  }, process.env.JWT_SECRET as string, { expiresIn: '24h' })
 
   return token
 }

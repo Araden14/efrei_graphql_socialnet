@@ -10,7 +10,7 @@ const createPost: MutationResolvers['createPost'] = async (
   context: Context
 ) => {
   try {
-    if (!context.user) throw new Error('User is not provided')
+    if (!context.user) throw new Error('User is not provided, check your token')
 
     const createdPost = await db.post.create({
       data: {

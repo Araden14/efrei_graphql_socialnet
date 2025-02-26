@@ -10,6 +10,8 @@ type Mutation {
 
 type Query {
   fetchPosts: [GraphQLPost!]!
+  fetchLikes: [GraphQLLike!]!
+  fetchLikesByUser: [GraphQLLike!]!
 }
 
 type CreateUserResponse {

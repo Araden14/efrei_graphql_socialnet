@@ -2,24 +2,7 @@ import { Resolvers } from "../../types.js";
 import { Context } from "../../context.js";
 import db from "../../db.js";
 
-export const CommentResolver: Resolvers['GraphQLComment'] = {
-    author: async ({author}, _, {dataSources: {db}}: Context) => {
-        const user = await db.user.findUniqueOrThrow({where: {id: author.id}});
-        return {
-            ...user,
-            createdAt: user.createdAt.toISOString(),
-            updatedAt: user.updatedAt.toISOString()
-        };
-    },
-    post: async ({post}, _, {dataSources: {db}}: Context) => {
-        const foundPost = await db.post.findUniqueOrThrow({where: {id: post.id}});
-        return {
-            ...foundPost,
-            createdAt: foundPost.createdAt.toISOString(),
-            updatedAt: foundPost.updatedAt.toISOString()
-        };
-    },  
-};
+
 
 export const LikeResolver: Resolvers['GraphQLLike'] = {
     user: async ({ userId }, _, { user, dataSources: { db } }: Context) => {

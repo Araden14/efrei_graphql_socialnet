@@ -5,8 +5,8 @@ import db from "../../db.js"
 import { Context } from "../../context.js"
 
 export const PostResolver: Resolvers['GraphQLPost'] = {
-    author: async ({author}, _, {dataSources: {db}}: Context) => {
-        const user = await db.user.findUniqueOrThrow({where: {id: author?.id}});
+    author: async ({authorId}, _, {dataSources: {db}}: Context) => {
+        const user = await db.user.findUniqueOrThrow({where: { id : authorId }});
         return {
             ...user,
         };
