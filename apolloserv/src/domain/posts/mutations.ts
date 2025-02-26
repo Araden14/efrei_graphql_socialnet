@@ -5,7 +5,7 @@ type PostMutations = WithRequired<MutationResolvers, 'createPost'>
 
 const createPost: MutationResolvers['createPost'] = async (
   _,
-  { title, content, authorId },
+  { title, content },
   { dataSources: { db }, user }
 ) => {
   try {

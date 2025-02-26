@@ -2,6 +2,7 @@ type GraphQLPost {
   id: Int!
   title: String!
   content: String!
+  authorId: Int!
   author: GraphQLUser!
   comments: [GraphQLComment!]!
   likes: [GraphQLLike!]!
@@ -17,6 +18,8 @@ type Mutation {
   createUser(email: String!, password: String!, name: String): CreateUserResponse!
   signIn(email: String!, password: String!): SignInResponse!
   createPost(title: String!, content: String!): PostResponse!
+  likePost(postId: Int!): LikeResponse!
+  unlikePost(postId: Int!): LikeResponse!
 }
 
 type CreateUserResponse {
@@ -41,6 +44,13 @@ type PostResponse {
   post: GraphQLPost
 }
 
+type LikeResponse {
+  code: Int!
+  success: Boolean!
+  message: String!
+  like: GraphQLLike
+}
+
 type GraphQLUser {
   id: Int!
   email: String!
@@ -55,7 +65,9 @@ type GraphQLUser {
 type GraphQLComment {
   id: Int!
   content: String!
+  authorId: Int!
   author: GraphQLUser!
+  postId: Int!
   post: GraphQLPost!
   createdAt: String!
   updatedAt: String!
@@ -63,7 +75,9 @@ type GraphQLComment {
 
 type GraphQLLike {
   id: Int!
+  userId: Int!
   user: GraphQLUser!
+  postId: Int!
   post: GraphQLPost!
   createdAt: String!
   updatedAt: String!

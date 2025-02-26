@@ -2,9 +2,10 @@ import { GraphQlComment } from './../../types';
 import { Resolvers } from "../../types.js"
 import { Post } from ".prisma/client"
 import db from "../../db.js"
+import { Context } from "../../context.js"
 
 export const PostResolver: Resolvers['GraphQLPost'] = {
-    author: async ({author}, _, {dataSources: {db}}) => {
+    author: async ({author}, _, {dataSources: {db}}: Context) => {
         const user = await db.user.findUniqueOrThrow({where: {id: author.id}});
         return {
             ...user,
@@ -12,7 +13,7 @@ export const PostResolver: Resolvers['GraphQLPost'] = {
             updatedAt: user.updatedAt.toISOString()
         };
     },
-    comments: async ({id}, _, {dataSources: {db}}) => {
+    comments: async ({id}, _, {dataSources: {db}}: Context) => {
         const comments = await db.comment.findMany({where: {postId: id}});
         return comments.map(comment => ({
             ...comment,
@@ -20,7 +21,7 @@ export const PostResolver: Resolvers['GraphQLPost'] = {
             updatedAt: comment.updatedAt.toISOString()
         }));
     },
-    likes: async ({id}, _, {dataSources: {db}}) => {
+    likes: async ({id}, _, {dataSources: {db}}: Context) => {
         const likes = await db.like.findMany({where: {postId: id}});
         return likes.map(like => ({
             ...like,
