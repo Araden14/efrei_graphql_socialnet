@@ -20,6 +20,7 @@ type Query {
   fetchComments: [GraphQLComment!]!
   fetchCommentsByUser: [GraphQLComment!]!
   fetchCommentsByPost(postId: Int!): [GraphQLComment!]!
+  verifyUser(token: String!): UserResponse!
 }
 
 type CreateUserResponse {
@@ -99,4 +100,11 @@ type CommentResponse {
   success: Boolean!
   message: String!
   comment: GraphQLComment
+}
+
+type UserResponse {
+  code: Int!
+  success: Boolean!
+  message: String!
+  user: GraphQLUser
 }
