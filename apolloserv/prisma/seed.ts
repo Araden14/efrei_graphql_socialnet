@@ -7,48 +7,83 @@ async function main() {
   try {
     console.log("🌱 Insertion des données de test...");
 
-    // Création de l'utilisateur
-    const user = await prisma.user.create({
-      data: {
-        email: "test@example.com",
-        password: await hashPassword("password123"),
-        username: "TestUser",
-      },
-    });
+    // Création des utilisateurs
+    const users = await Promise.all([
+      prisma.user.create({
+        data: {
+          email: "alice@example.com",
+          password: await hashPassword("password123"),
+          username: "Alice",
+        },
+      }),
+      prisma.user.create({
+        data: {
+          email: "bob@example.com",
+          password: await hashPassword("password123"),
+          username: "Bob",
+        },
+      }),
+    ]);
 
-    console.log("✅ Utilisateur créé :", user);
+    console.log("✅ Utilisateurs créés :", users);
 
-    // Création d'un post lié à cet utilisateur
-    const post = await prisma.post.create({
-      data: {
-        title: "Mon premier post",
-        content: "It's incredible",
-        authorId: user.id,
-      },
-    });
+    // Création des posts
+    const posts = await Promise.all([
+      prisma.post.create({
+        data: {
+          title: "Hello World",
+          content: "Mon premier post!",
+          authorId: users[0].id,
+        },
+      }),
+      prisma.post.create({
+        data: {
+          title: "Deuxième post",
+          content: "Un autre super post!",
+          authorId: users[1].id,
+        },
+      }),
+    ]);
 
-    console.log("✅ Post créé :", post);
+    console.log("✅ Posts créés :", posts);
 
-    // Création d'un commentaire sur ce post
-    const comment = await prisma.comment.create({
-      data: {
-        content: "Super post !",
-        authorId: user.id,
-        postId: post.id,
-      },
-    });
+    // Création des commentaires
+    const comments = await Promise.all([
+      prisma.comment.create({
+        data: {
+          content: "Super post Alice!",
+          authorId: users[1].id,
+          postId: posts[0].id,
+        },
+      }),
+      prisma.comment.create({
+        data: {
+          content: "Merci Bob!",
+          authorId: users[0].id,
+          postId: posts[1].id,
+        },
+      }),
+    ]);
 
-    console.log("✅ Commentaire ajouté :", comment);
+    console.log("✅ Commentaires ajoutés :", comments);
 
-    // Ajout d'un like sur ce post
-    const like = await prisma.like.create({
-      data: {
-        userId: user.id,
-        postId: post.id,
-      },
-    });
+    // Ajout de likes
+    const likes = await Promise.all([
+      prisma.like.create({
+        data: {
+          userId: users[0].id,
+          postId: posts[1].id,
+        },
+      }),
+      prisma.like.create({
+        data: {
+          userId: users[1].id,
+          postId: posts[0].id,
+        },
+      }),
+    ]);
 
-    console.log("✅ Like ajouté :", like);
+    console.log("✅ Likes ajoutés :", likes);
 
     console.log("🌱 Seeding terminé avec succès !");
   } catch (error) {
