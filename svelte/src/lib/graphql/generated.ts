@@ -196,13 +196,6 @@ export type QueryVerifyUserArgs = {
   token: Scalars['String']['input'];
 };
 
-export type SignIn = {
-  __typename?: 'SignIn';
-  email: Scalars['String']['output'];
-  password: Scalars['String']['output'];
-  username?: Maybe<Scalars['String']['output']>;
-};
-
 export type SignInResponse = {
   __typename?: 'SignInResponse';
   code: Scalars['Int']['output'];
@@ -245,6 +238,34 @@ export type VerifyQueryVariables = Exact<{
 
 export type VerifyQuery = { __typename?: 'Query', verifyUser: { __typename?: 'UserResponse', code: number, success: boolean, user?: { __typename?: 'GraphQLUser', id: number, email: string, username?: string | null } | null } };
 
+export type PublishPostMutationVariables = Exact<{
+  title: Scalars['String']['input'];
+  content: Scalars['String']['input'];
+}>;
+
+
+export type PublishPostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'PostResponse', code: number, success: boolean, message: string, post?: { __typename?: 'GraphQLPost', id: number, title: string, content: string, authorId: number, createdAt?: any | null, updatedAt?: any | null, author?: { __typename?: 'GraphQLUser', id: number, email: string, username?: string | null, updatedAt?: any | null, createdAt?: any | null } | null } | null } };
+
+export type PublishCommentMutationVariables = Exact<{
+  postId: Scalars['Int']['input'];
+  content: Scalars['String']['input'];
+}>;
+
+
+export type PublishCommentMutation = { __typename?: 'Mutation', createComment: { __typename?: 'CommentResponse', code: number, success: boolean, message: string, comment?: { __typename?: 'GraphQLComment', id: number, authorId: number, content: string, createdAt?: any | null, updatedAt?: any | null, author: { __typename?: 'GraphQLUser', username?: string | null } } | null } };
+
+export type GetPostsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetPostsQuery = { __typename?: 'Query', fetchPosts: Array<{ __typename?: 'GraphQLPost', id: number, authorId: number, title: string, content: string, createdAt?: any | null, updatedAt?: any | null, author?: { __typename?: 'GraphQLUser', id: number, username?: string | null } | null, comments?: Array<{ __typename?: 'GraphQLComment', id: number, authorId: number, content: string, createdAt?: any | null, updatedAt?: any | null, author: { __typename?: 'GraphQLUser', username?: string | null } }> | null, likes?: Array<{ __typename?: 'GraphQLLike', id: number, createdAt?: any | null, updatedAt?: any | null, userId: number, user: { __typename?: 'GraphQLUser', username?: string | null } }> | null }> };
+
+export type LikeAPostMutationVariables = Exact<{
+  postId: Scalars['Int']['input'];
+}>;
+
+
+export type LikeAPostMutation = { __typename?: 'Mutation', likePost: { __typename?: 'LikeResponse', code: number, success: boolean, message: string, like?: { __typename?: 'GraphQLLike', userId: number, id: number, postId: number, createdAt?: any | null, updatedAt?: any | null, user: { __typename?: 'GraphQLUser', username?: string | null } } | null } };
+
 
 export const LoginDoc = gql`
     mutation Login($email: String!, $password: String!, $username: String) {
@@ -284,6 +305,103 @@ export const VerifyDoc = gql`
       id
       email
       username
+    }
+  }
+}
+    `;
+export const PublishPostDoc = gql`
+    mutation publishPost($title: String!, $content: String!) {
+  createPost(title: $title, content: $content) {
+    code
+    success
+    message
+    post {
+      id
+      title
+      content
+      authorId
+      author {
+        id
+        email
+        username
+        updatedAt
+        createdAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+export const PublishCommentDoc = gql`
+    mutation publishComment($postId: Int!, $content: String!) {
+  createComment(postId: $postId, content: $content) {
+    code
+    success
+    message
+    comment {
+      id
+      authorId
+      content
+      createdAt
+      updatedAt
+      author {
+        username
+      }
+    }
+  }
+}
+    `;
+export const GetPostsDoc = gql`
+    query getPosts {
+  fetchPosts {
+    id
+    authorId
+    title
+    content
+    createdAt
+    updatedAt
+    author {
+      id
+      username
+    }
+    comments {
+      id
+      authorId
+      content
+      createdAt
+      updatedAt
+      author {
+        username
+      }
+    }
+    likes {
+      id
+      createdAt
+      updatedAt
+      userId
+      user {
+        username
+      }
+    }
+  }
+}
+    `;
+export const LikeAPostDoc = gql`
+    mutation likeAPost($postId: Int!) {
+  likePost(postId: $postId) {
+    code
+    success
+    message
+    like {
+      userId
+      id
+      postId
+      user {
+        username
+      }
+      createdAt
+      updatedAt
     }
   }
 }
@@ -347,3 +465,74 @@ export const Verify = (
             return result;
           }
         
+export const publishPost = (
+            options: Omit<
+              MutationOptions<any, PublishPostMutationVariables>, 
+              "mutation"
+            >
+          ) => {
+            const m = client.mutate<PublishPostMutation, PublishPostMutationVariables>({
+              mutation: PublishPostDoc,
+              ...options,
+            });
+            return m;
+          }
+export const publishComment = (
+            options: Omit<
+              MutationOptions<any, PublishCommentMutationVariables>, 
+              "mutation"
+            >
+          ) => {
+            const m = client.mutate<PublishCommentMutation, PublishCommentMutationVariables>({
+              mutation: PublishCommentDoc,
+              ...options,
+            });
+            return m;
+          }
+export const getPosts = (
+            options: Omit<
+              WatchQueryOptions<GetPostsQueryVariables>, 
+              "query"
+            >
+          ): Readable<
+            ApolloQueryResult<GetPostsQuery> & {
+              query: ObservableQuery<
+                GetPostsQuery,
+                GetPostsQueryVariables
+              >;
+            }
+          > => {
+            const q = client.watchQuery({
+              query: GetPostsDoc,
+              ...options,
+            });
+            var result = readable<
+              ApolloQueryResult<GetPostsQuery> & {
+                query: ObservableQuery<
+                  GetPostsQuery,
+                  GetPostsQueryVariables
+                >;
+              }
+            >(
+              { data: {} as any, loading: true, error: undefined, networkStatus: 1, query: q },
+              (set) => {
+                q.subscribe((v: any) => {
+                  set({ ...v, query: q });
+                });
+              }
+            );
+            return result;
+          }
+        
+export const likeAPost = (
+            options: Omit<
+              MutationOptions<any, LikeAPostMutationVariables>, 
+              "mutation"
+            >
+          ) => {
+            const m = client.mutate<LikeAPostMutation, LikeAPostMutationVariables>({
+              mutation: LikeAPostDoc,
+              ...options,
+            });
+            return m;
+          }
