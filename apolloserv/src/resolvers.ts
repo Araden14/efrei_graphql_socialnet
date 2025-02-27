@@ -9,7 +9,7 @@ import { likeMutations } from "./domain/likes/mutations.js";
 import { commentQueries } from "./domain/comments/queries.js";
 import { CommentResolver } from "./domain/comments/models.js";
 import { commentMutations } from "./domain/comments/mutations.js";
-
+import { userQueries } from "./domain/user/queries.js";
 export const resolvers: Resolvers = {
   Mutation: {
     ...userMutations,
@@ -21,6 +21,7 @@ export const resolvers: Resolvers = {
     ...postQueries,
     ...likeQueries,
     ...commentQueries,
+    ...userQueries,
   },
   GraphQLPost: PostResolver,
   GraphQLLike: LikeResolver,

@@ -180,11 +180,17 @@ export type Query = {
   fetchLikes: Array<GraphQlLike>;
   fetchLikesByUser: Array<GraphQlLike>;
   fetchPosts: Array<GraphQlPost>;
+  verifyUser: UserResponse;
 };
 
 
 export type QueryFetchCommentsByPostArgs = {
   postId: Scalars['Int']['input'];
+};
+
+
+export type QueryVerifyUserArgs = {
+  token: Scalars['String']['input'];
 };
 
 export type SignInResponse = {
@@ -193,6 +199,14 @@ export type SignInResponse = {
   message: Scalars['String']['output'];
   success: Scalars['Boolean']['output'];
   token?: Maybe<Scalars['String']['output']>;
+  user?: Maybe<GraphQlUser>;
+};
+
+export type UserResponse = {
+  __typename?: 'UserResponse';
+  code: Scalars['Int']['output'];
+  message: Scalars['String']['output'];
+  success: Scalars['Boolean']['output'];
   user?: Maybe<GraphQlUser>;
 };
 
@@ -282,6 +296,7 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   SignInResponse: ResolverTypeWrapper<SignInResponse>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  UserResponse: ResolverTypeWrapper<UserResponse>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -301,6 +316,7 @@ export type ResolversParentTypes = {
   Query: {};
   SignInResponse: SignInResponse;
   String: Scalars['String']['output'];
+  UserResponse: UserResponse;
 };
 
 export type CommentResponseResolvers<ContextType = Context, ParentType extends ResolversParentTypes['CommentResponse'] = ResolversParentTypes['CommentResponse']> = {
@@ -407,6 +423,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   fetchLikes?: Resolver<Array<ResolversTypes['GraphQLLike']>, ParentType, ContextType>;
   fetchLikesByUser?: Resolver<Array<ResolversTypes['GraphQLLike']>, ParentType, ContextType>;
   fetchPosts?: Resolver<Array<ResolversTypes['GraphQLPost']>, ParentType, ContextType>;
+  verifyUser?: Resolver<ResolversTypes['UserResponse'], ParentType, ContextType, RequireFields<QueryVerifyUserArgs, 'token'>>;
 };
 
 export type SignInResponseResolvers<ContextType = Context, ParentType extends ResolversParentTypes['SignInResponse'] = ResolversParentTypes['SignInResponse']> = {
@@ -414,6 +431,14 @@ export type SignInResponseResolvers<ContextType = Context, ParentType extends Re
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   token?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['GraphQLUser']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserResponseResolvers<ContextType = Context, ParentType extends ResolversParentTypes['UserResponse'] = ResolversParentTypes['UserResponse']> = {
+  code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['GraphQLUser']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -431,5 +456,6 @@ export type Resolvers<ContextType = Context> = {
   PostResponse?: PostResponseResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   SignInResponse?: SignInResponseResolvers<ContextType>;
+  UserResponse?: UserResponseResolvers<ContextType>;
 };
 
