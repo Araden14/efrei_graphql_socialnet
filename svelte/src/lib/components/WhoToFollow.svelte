@@ -4,22 +4,22 @@
   export let suggestions = [
     {
       id: 1,
-      name: 'Jane Smith',
-      handle: 'janesmith',
+      name: 'Valentin circosta',
+      handle: 'valentin',
       avatar: '/docs/images/people/profile-picture-5.jpg',
       bio: 'Software Developer | SvelteKit Enthusiast'
     },
     {
       id: 2,
-      name: 'Robert Johnson',
-      handle: 'robertj',
+      name: 'Valeryia Shin',
+      handle: 'valeryia',
       avatar: '/docs/images/people/profile-picture-4.jpg',
       bio: 'UX Designer | Web Developer'
     },
     {
       id: 3,
-      name: 'Sarah Williams',
-      handle: 'sarahw',
+      name: 'Paartheepan',
+      handle: 'Paartheep@n',
       avatar: '/docs/images/people/profile-picture-1.jpg',
       bio: 'Frontend Developer | GraphQL Expert'
     }

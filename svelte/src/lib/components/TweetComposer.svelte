@@ -1,12 +1,28 @@
 <script lang="ts">
   import { Avatar, Button, Card } from 'flowbite-svelte';
   import { createEventDispatcher } from 'svelte';
-
+  import { publishPost } from '$lib/graphql/generated';
   export let userAvatar = '/profile-placeholder.jpg';
   export let placeholder = "What's happening?";
+  export let titlePlaceholder = "Add a title";
   export let buttonText = "Tweet";
+
+  async function handlePublishPost(content: string, title: string) {
+        try {
+            const result = await publishPost({
+                variables: {
+                    content: content,
+                    title: title
+                }
+            })
+            console.log(result)
+        } catch (e) {
+            console.error('Error publishing post:', e);
+        }
+    }
   
   let tweetContent = '';
+  let tweetTitle = '';
   let isSubmitting = false;
   let charCount = 0;
   const MAX_CHARS = 280;
@@ -19,26 +35,31 @@
   
   function handleTweet() {
     if (isSubmitting || !tweetContent.trim() || isOverLimit) return;
-    
+    handlePublishPost(tweetContent, tweetTitle);
     isSubmitting = true;
     
-    // In a real app, this would call a GraphQL mutation
     dispatch('tweet', {
-      content: tweetContent
+      content: tweetContent,
+      title: tweetTitle
     });
     
-    // Reset the form
     tweetContent = '';
+    tweetTitle = '';
     isSubmitting = false;
   }
 </script>
 
-<Card class="mb-4 p-4 border-none shadow-sm">
+<Card class="mb-4 p-4 border-none shadow-sm" size="md">
   <div class="flex gap-3">
     <Avatar src={userAvatar} alt="Your profile" size="md" />
     
     <div class="flex-1">
       <div class="mb-2">
+        <input
+          bind:value={tweetTitle}
+          class="w-full text-lg border-none focus:ring-0 focus:border-none bg-transparent p-0 mb-2"
+          placeholder={titlePlaceholder}
+        />
         <textarea
           bind:value={tweetContent}
           class="w-full text-lg border-none focus:ring-0 focus:border-none resize-none h-24 bg-transparent p-0"
