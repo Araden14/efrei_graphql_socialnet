@@ -25,11 +25,11 @@
             console.error('Error liking post:', e);
         }
     }
-
     let open = false;
-
+    let selectedPostId: number | null = null;
     async function handleOpenComment(postId: number) {
         open = true;
+        selectedPostId = postId;
     }
 
 	onMount(async () => {
@@ -183,3 +183,6 @@
         <WhoToFollow />
     </div>
 </div>
+{#if selectedPostId !== null}
+    <Comment open={open} postId={selectedPostId} />
+{/if}

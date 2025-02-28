@@ -6,7 +6,7 @@
     export let postId: number;
     let content: string = '';
 
-    async function createComment() {
+    async function createComment(postId: number, content: string) {
         try {
             const result = await publishComment({
                 variables: {
@@ -15,7 +15,7 @@
                 }
             });
             console.log(result);
-            open = false; // Close the modal after successful comment creation
+            open = false;
         } catch (e) {
             console.error('Error publishing comment:', e);
         }
@@ -23,7 +23,7 @@
 </script>
 
 <Modal bind:open size="md" autoclose>
-    <form class="space-y-6" on:submit|preventDefault={createComment}>
+    <form class="space-y-6" on:submit|preventDefault={() => createComment(postId, content)}>
         <h3 class="text-xl font-medium text-gray-900 dark:text-white">
             Add a comment
         </h3>
