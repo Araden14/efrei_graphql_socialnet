@@ -5,7 +5,9 @@
   "scripts": {
     "compile": "tsc",
     "start": "npm run compile && node ./dist/index.js",
-    "dev": "tsx src/index.ts"
+    "dev": "tsx src/index.ts",
+    "generate": "graphql-codegen",
+    "prisma": "prisma"
   },
   "keywords": [],
   "author": "",
