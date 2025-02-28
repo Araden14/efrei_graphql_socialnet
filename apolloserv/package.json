@@ -5,9 +5,7 @@
   "scripts": {
     "compile": "tsc",
     "start": "npm run compile && node ./dist/index.js",
-    "dev": "ts-node --esm src/index.ts",
-    "generate": "graphql-codegen",
-    "prisma": "prisma"
+    "dev": "tsx src/index.ts"
   },
   "keywords": [],
   "author": "",
@@ -38,6 +36,7 @@
     "@types/node": "^22.13.5",
     "prisma": "^6.4.1",
     "ts-node": "^10.9.2",
+    "tsx": "^4.19.3",
     "typescript": "^5.7.3"
   }
 }

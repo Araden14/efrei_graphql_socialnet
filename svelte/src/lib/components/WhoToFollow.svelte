@@ -1,30 +1,30 @@
 <script lang="ts">
   import { Avatar, Button, Card } from 'flowbite-svelte';
-  
+
   export let suggestions = [
     {
       id: 1,
-      name: 'Valentin circosta',
-      handle: 'valentin',
-      avatar: '/docs/images/people/profile-picture-5.jpg',
+      name: 'Jane Smith',
+      handle: 'janesmith',
+      avatar: '/avatar1.png',
       bio: 'Software Developer | SvelteKit Enthusiast'
     },
     {
       id: 2,
-      name: 'Valeryia Shin',
-      handle: 'valeryia',
-      avatar: '/docs/images/people/profile-picture-4.jpg',
+      name: 'Robert Johnson',
+      handle: 'robertj',
+      avatar: '/avatar2.png',
       bio: 'UX Designer | Web Developer'
     },
     {
       id: 3,
-      name: 'Paartheepan',
-      handle: 'Paartheep@n',
-      avatar: '/docs/images/people/profile-picture-1.jpg',
+      name: 'Sarah Williams',
+      handle: 'sarahw',
+      avatar: '/avatar3.png',
       bio: 'Frontend Developer | GraphQL Expert'
     }
   ];
-  
+
   function handleFollow(id: number) {
     // This will be implemented with GraphQL later
     console.log(`Following user ${id}`);
@@ -33,7 +33,7 @@
 
 <Card class="p-4">
   <h2 class="text-xl font-bold mb-4">Who to follow</h2>
-  
+
   <div class="space-y-4">
     {#each suggestions as user (user.id)}
       <div class="flex items-center justify-between py-2">
@@ -51,7 +51,7 @@
             <div class="text-gray-500 text-sm">@{user.handle}</div>
           </div>
         </div>
-        
+
         <Button
           color="dark"
           pill={true}
@@ -64,6 +64,6 @@
       </div>
     {/each}
   </div>
-  
+
   <a href="#" class="text-blue-500 text-sm block mt-4 hover:underline">Show more</a>
-</Card> 
+</Card>

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Card } from 'flowbite-svelte';
-  
+
   export let trends = [
     {
       id: 1,
@@ -37,7 +37,7 @@
 
 <Card class="p-4">
   <h2 class="text-xl font-bold mb-4">Trends for you</h2>
-  
+
   <div class="space-y-4">
     {#each trends as trend (trend.id)}
       <div class="hover:bg-gray-100 p-2 rounded-lg -mx-2 cursor-pointer transition-colors duration-200">
@@ -54,6 +54,6 @@
       </div>
     {/each}
   </div>
-  
+
   <a href="#" class="text-blue-500 text-sm block mt-4 hover:underline">Show more</a>
-</Card> 
+</Card>
