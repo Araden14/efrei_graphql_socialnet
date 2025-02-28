@@ -51,22 +51,22 @@
     
     <form on:submit|preventDefault={handleLogin} class="space-y-4">
       <div>
-        <Label for="username" class="mb-2">Username</Label>
+        <Label for="username" class="mb-2">Email</Label>
         <Input 
           id="username" 
           type="text" 
-          placeholder="Enter your username"
+          placeholder="Entrez votre email ici"
           bind:value={username} 
           required
         />
       </div>
       
       <div>
-        <Label for="password" class="mb-2">Password</Label>
+        <Label for="password" class="mb-2">Mot de passe</Label>
         <Input 
           id="password" 
           type="password" 
-          placeholder="Enter your password"
+          placeholder="Entrez votre mot de passe ici"
           bind:value={password} 
           required
         />

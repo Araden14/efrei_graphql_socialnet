@@ -33,7 +33,7 @@
   }
 </script>
 
-<Card class="mb-4 p-4 border-none shadow-sm">
+<Card class="mb-4 p-4 border-none shadow-sm" size="lg">
   <div class="flex gap-3">
     <Avatar src={userAvatar} alt="Your profile" size="md" />
 

@@ -24,16 +24,12 @@
       bio: 'Frontend Developer | GraphQL Expert'
     }
   ];
-
-  function handleFollow(id: number) {
-    // This will be implemented with GraphQL later
-    console.log(`Following user ${id}`);
-  }
+  
 </script>
 
-<Card class="p-4">
-  <h2 class="text-xl font-bold mb-4">Who to follow</h2>
-
+<Card class="p-4 mt-4">
+  <h2 class="text-xl font-bold mb-4">Qui suivre</h2>
+  
   <div class="space-y-4">
     {#each suggestions as user (user.id)}
       <div class="flex items-center justify-between py-2">
@@ -57,13 +53,12 @@
           pill={true}
           size="xs"
           class="bg-black hover:bg-gray-800"
-          on:click={() => handleFollow(user.id)}
         >
-          Follow
+          Suivre
         </Button>
       </div>
     {/each}
   </div>
-
-  <a href="#" class="text-blue-500 text-sm block mt-4 hover:underline">Show more</a>
-</Card>
+  
+  <a href="#" class="text-blue-500 text-sm block mt-4 hover:underline">Afficher plus</a>
+</Card> 
