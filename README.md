@@ -7,12 +7,8 @@ Projet efrei de création d'un mini réseau social pour découvrir graphql
 
 1. Cloner le dépôt
 2. Installer les dépendances : `npm install`
-3. Configurer la base de données dans `.env` 
-  A creer dans apolloserv :
-  DATABASE_URL="file:./db.sqlite"
-  JWT_SECRET=secret
-4. Exécuter les migrations : `npx prisma migrate dev`
-5. Démarrer le serveur : `npm run dev`
+3. Exécuter les migrations : `npx prisma migrate dev`
+4. Démarrer le serveur : `npm run dev`
 
 ## Utilisation
 
@@ -21,7 +17,21 @@ Projet efrei de création d'un mini réseau social pour découvrir graphql
 - Query `me` : Récupérer les informations de l'utilisateur connecté
 
 
+# Back-End
+
+## Installation
+
+1. Installer les dépendances : `npm install`
+2. Configurer la base de données dans `.env` 
+  A creer dans apolloserv :
+  DATABASE_URL="file:./db.sqlite"
+  JWT_SECRET=secret
+3. Démarrer le serveur : `npm run dev`
+
+
 # Front-End
+
+## Installation
 
 1. Installer les dépendances : `npm install`
 2. Démarrer le front-end : `npm run dev`
