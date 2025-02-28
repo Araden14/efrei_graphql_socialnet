@@ -4,7 +4,7 @@
   export let user = {
     username: 'John Doe',
     handle: 'johndoe',
-    avatar: '/profile-placeholder.jpg'
+    avatar: '/avatar4.png'
   };
 </script>
 
